@@ -48,9 +48,9 @@ export default function ReactFlowHookExample() {
   const [edges, setEdges, onEdgesChange] = useEdgesState(initialEdges);
 
 
-  console.log(`render----------`, {nodes, edges})
+
   return (
-    <ReactFlowProvider>
+    // <ReactFlowProvider>
       <section style={{ height: 500, width: 900, border: "2px solid black" }}>
         <a href="/">Go back </a>
         <ReactFlow
@@ -65,6 +65,6 @@ export default function ReactFlowHookExample() {
           <Background />
         </ReactFlow>
       </section>
-    </ReactFlowProvider>
+    // </ReactFlowProvider>
   );
 }

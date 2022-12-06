@@ -1,13 +1,15 @@
 import React from "react";
-import { Handle, NodeProps, Position, useReactFlow } from "reactflow";
+import { Handle, NodeProps, Position, useReactFlow, useStoreApi } from "reactflow";
 
 // TODO: should I just use global CSS?
 const DEFAULT_NODE_STYLES:React.CSSProperties = {
   border: "2px solid black",
   height: 50,
-  position: 'relative'
+  position: 'relative',
+  pointerEvents: 'all',
 }
 const HIGHLIGHTED_NODE_STYLES:React.CSSProperties = {
+  pointerEvents: 'all',
   border: '2px solid #5f95ff',
   boxShadow: '1px -1px 2px 3px rgba(95,149,255,0.40)'
 }
@@ -18,6 +20,7 @@ export const CustomNode = (nodeInfo: NodeProps) => {
 
   console.log(`[CustomNode] - `, nodeInfo)
   const reactFlowInstance = useReactFlow();
+  const store = useStoreApi()
 
   /**
    * @description
@@ -28,6 +31,7 @@ export const CustomNode = (nodeInfo: NodeProps) => {
     const edgesConnectedToMeIds = new Set();
     const nodesConnectedToMeIds = new Set();
 
+    alert(1)
     reactFlowInstance.getEdges().forEach(edge => {
       const isEdgeConnectedToMe = edge?.target === nodeInfo?.id || edge?.source === nodeInfo?.id;
       if(isEdgeConnectedToMe){
@@ -45,47 +49,33 @@ export const CustomNode = (nodeInfo: NodeProps) => {
     const updatedNodes = reactFlowInstance.getNodes().map(node => {
       const shouldUpdateNode = nodesConnectedToMeIds.has(node?.id);
       if(shouldUpdateNode){
-        // @ts-ignore
-        node.data.customCSSStyles = {...HIGHLIGHTED_NODE_STYLES}
+        node.data = {...node.data, customCSSStyles: HIGHLIGHTED_NODE_STYLES}
       }
       return node
     });
 
     // debugger;
     reactFlowInstance.setNodes(updatedNodes)
-    forceUpdate()
   }
 
 
   const _styles = {
-        ...DEFAULT_NODE_STYLES,
-        // @ts-ignore
-        ...nodeInfo.data?.customCSSStyles
-      }
-      console.log(`styles--`, _styles)
+    ...DEFAULT_NODE_STYLES,
+    // @ts-ignore
+    ...nodeInfo.data?.customCSSStyles
+  }
+  console.log(`styles--`, _styles)
+
   return (
     <div
       data-nodeid={nodeInfo.id}
       className="CustomNode"
       style={{..._styles}}
       onMouseOver={(event) => {
-        // const nodeElement = event?.target as HTMLDivElement;
-        // if(nodeElement.classList.contains('CustomNode') === false) return;
-
-        // console.log(`[onNodeMouseEnter] - node:`, nodeElement);
-        // console.log(`[onNodeMouseEnter] - event.target:`, nodeElement);
-        // nodeElement.style.border = '2px solid #5f95ff';
-        // nodeElement.style.boxShadow = '1px -1px 2px 3px rgba(95,149,255,0.40)';
         highlightNodesandEdgesConnectedToMe()
       }}
       onMouseLeave={(event) => {
-        // const nodeElement = event?.target as HTMLDivElement;
-        // if(nodeElement.classList.contains('CustomNode') === false) return;
-
-        // console.log(`[onNodeMouseEnter] - node:`, nodeElement);
-        // console.log(`[onNodeMouseEnter] - event.target:`, nodeElement);
-        // nodeElement.style.border = '2px solid black';
-        // nodeElement.style.boxShadow = '';
+        // unhighlight
       }}
     >
       <Handle

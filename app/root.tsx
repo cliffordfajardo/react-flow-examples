@@ -8,6 +8,7 @@ import {
   ScrollRestoration,
 } from '@remix-run/react';
 import CSS_reactflow from 'reactflow/dist/style.css';
+import antdStyles from "antd/dist/antd.css";
 
 export const meta: MetaFunction = () => ({
   charset: 'utf-8',
@@ -16,7 +17,7 @@ export const meta: MetaFunction = () => ({
 });
 
 export function links() {
-  return [{ rel: 'stylesheet', href: CSS_reactflow }];
+  return [ { rel: 'stylesheet', href: antdStyles }, { rel: 'stylesheet', href: CSS_reactflow } ]
 }
 
 export default function App() {

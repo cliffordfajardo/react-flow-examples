@@ -36,6 +36,8 @@ export default function ReactFlowHoverConnections() {
     [setEdges]
   );
 
+  console.log(`[ReactFlowHoverConnections] -- render`, {nodes, edges})
+
   return (
     <section style={{ height: 500, width: 900, border: '2px solid black' }}>
       <a href="/">Go back </a>
